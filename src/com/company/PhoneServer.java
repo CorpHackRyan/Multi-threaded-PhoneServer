@@ -35,7 +35,7 @@ public class PhoneServer {
 
                 // Handle incoming client request
                 clientSocket = listener.accept();
-                System.out.println("Sending client to new thread");
+                System.out.println("Client has connected to PhoneServer 1.0 from: " + clientSocket);
 
             }
 
