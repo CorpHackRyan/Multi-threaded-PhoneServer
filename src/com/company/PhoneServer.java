@@ -3,27 +3,57 @@
 
 package com.company;
 import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.net.*;
 
+
 public class PhoneServer {
-    // Port number on which the server will be listening
-    private static int port = 2014;
-
-    // The server socket.
-    private static ServerSocket listener = null;
-
-    // The client socket.
-    private static Socket clientSocket = null;
 
     public static void main(String[] args) throws Exception {
-        /**
+
+         /**
          * Open a server socket on the specified port number (2014) and monitor the port
          * for connection requests. When a connection request is received, create a client
          * request thread, passing to its constructor a reference to the Socket object that
          * represents the established connection with the client.
          */
-        System.out.println("Server listening");
-        //
-    }
 
+        System.out.println("Server listening");
+
+        // The server socket.
+        int my_port = 2014;
+        ServerSocket listener = new ServerSocket(my_port);
+
+
+
+        while (true) {
+
+            Socket clientSocket = null;
+
+            try {
+
+                // Handle incoming client request
+                clientSocket = listener.accept();
+                System.out.println("Sending client to new thread");
+
+            }
+
+            catch (Exception e) {
+                clientSocket.close();
+                e.printStackTrace();
+
+                }
+
+
+        }
+
+        //System.out.println("Client connected from: " + clientSocket);
+
+
+
+        // new java.util.Scanner(System.in).nextLine();
+
+
+    }
 }
