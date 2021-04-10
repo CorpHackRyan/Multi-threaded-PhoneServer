@@ -1,6 +1,3 @@
-// This is not my code. It was give to use to build a client model based off this server.
-// I have modified it a little to suit my needs.
-
 package com.company;
 import java.io.*;
 import java.text.*;
