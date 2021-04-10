@@ -2,11 +2,10 @@ package com.company;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 
 public class PhoneClient {
-
-    private static final int total_timeout = 1000;	// amount to time out in milliseconds
 
     public static void main(String[] args) throws Exception {
         /**
@@ -24,13 +23,33 @@ public class PhoneClient {
 
         //Establish a connection with the Phone Server
         Socket connection_to_PServer = new Socket(server_ip, server_port);
-        String message = "GET";
+
+        System.out.println("Please enter your name: ");
+        Scanner scanner = new Scanner(System.in);
+        String msg = scanner.nextLine();
+
 
         // obtaining input and out streams
         DataInputStream dis = new DataInputStream(connection_to_PServer.getInputStream());
         DataOutputStream dos = new DataOutputStream(connection_to_PServer.getOutputStream());
 
-        dos.writeUTF(message);
+        dos.writeUTF(msg);
+
+        while (true)
+        {
+            System.out.println(dis.readUTF());
+            String tosend = scanner.nextLine();
+            dos.writeUTF(tosend);
+
+            if(tosend.equals("Exit"))
+            {
+                System.out.println("Closing this connection : " + connection_to_PServer);
+                connection_to_PServer.close();
+                System.out.println("Connection closed");
+                break;
+
+            }
+        }
 
         }
 

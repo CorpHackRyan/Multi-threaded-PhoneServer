@@ -8,22 +8,16 @@ import java.util.*;
 import java.net.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.util.Scanner;
+
 
 public class PhoneServer {
 
     public static void main(String[] args) throws Exception {
 
+        System.out.println("Server is running..");
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-
-
-        /**
-        * Open a server socket on the specified port number (2014) and monitor the port
-        * for connection requests. When a connection request is received, create a client
-        * request thread, passing to its constructor a reference to the Socket object that
-        * represents the established connection with the client.
-        */
-
-        System.out.println("Server listening");
 
         // The server socket.
         int my_port = 2014;
@@ -54,50 +48,72 @@ public class PhoneServer {
                 clientSocket.close();
                 e.printStackTrace();
 
+
                 }
-
-
         }
-
-        //System.out.println("Client connected from: " + clientSocket);
-
-
-
-        // new java.util.Scanner(System.in).nextLine();
-
-
     }
 }
+
 
 class ClientThread extends Thread
 {
     private final DataInputStream dis;
     private final DataOutputStream dos;
-    Socket s;
+    final Socket s;
+
 
     // Constructor
-    public ClientThread(Socket s, DataInputStream dis, DataOutputStream dos)
-    {
+    public ClientThread(Socket s, DataInputStream dis, DataOutputStream dos) {
+
         this.s = s;
         this.dis = dis;
         this.dos = dos;
 
     }
+    
+        @Override
+        public void run()
+        {
+            // Wait for user input
 
-    @Override
-    public void run()
-    {
-        String received;
-        String toreturn;
+            String user_name;
+            String received;
+            String toreturn;
+            boolean name_pass = false;
 
-        while(true) {
-            try {
-                dos.writeUTF("What do you want");
+            while (true) {
+                try {
+
+                    Scanner scanner = new Scanner(System.in);
+
+                    if (name_pass)
+                    {
+                        continue;
+
+                    } else {
+                        user_name = dis.readUTF();
+                        name_pass = true;
+
+                    }
+
+                    System.out.println("Connected to: " + user_name);
 
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                    String err = scanner.nextLine();
+
+                    dos.writeUTF("What do you want to do\n-> STORE <name> <number> \twhere <number> = xxx-xxxx\n" +
+                            "-> GET <name>\n-> REMOVE <name>\n-> QUIT");
+
+
+                    received = dis.readUTF();
+
+
+                } catch (IOException e) {
+                    // e.printStackTrace();
+                    //Scanner scanner = new Scanner(System.in);
+                    //String err = scanner.nextLine();
+                    System.out.println("print stack trade");
+                }
             }
-        }   // handleConnection(socket);
+        }
     }
-}
