@@ -70,9 +70,12 @@ class ClientThread extends Thread
         @Override
         public void run()
         {
-            String received;
-            String toreturn;
+            String received = "";
+            String toreturn = "";
             String tokens[];
+            String data_file_name = "phone_data.txt1";
+            String get_tokens[];
+            String name_found = "";
 
             while (true) {
 
@@ -96,15 +99,32 @@ class ClientThread extends Thread
                     switch(tokens[0]) {
 
                         case "STORE":
-                            FileWriter writer = new FileWriter("phone_data.txt1", true);
+                            FileWriter writer = new FileWriter(data_file_name, true);
                             writer.write(tokens[1] + " " + tokens[2] + "\n");
                             writer.close();
-                            toreturn = "'" + tokens[1] + " " + tokens[2] + "' has been stored in local database.";
+                            toreturn = "'" + tokens[1] + " " + tokens[2] + "' has been stored in local text file.";
                             dos.writeUTF(toreturn);
                             break;
 
                         case "GET":
-                            toreturn = "GET from SERVER";
+                            File phone_data = new File(data_file_name);
+                            Scanner reader = new Scanner(phone_data);
+
+                            while (reader.hasNextLine()) {
+                                String data = reader.nextLine();
+                                get_tokens = data.split(" ");
+
+                                // If line in text file matches client's request, send it back to client.
+                                if (get_tokens[0].contains(tokens[1])) {
+                                    toreturn = get_tokens[0] + " phone # is -> " + get_tokens[1];
+                                    break;
+                                }
+
+                                toreturn = "No name was found with that request.";
+
+                            } //
+
+                            reader.close();
                             dos.writeUTF(toreturn);
                             break;
 
