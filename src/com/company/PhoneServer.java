@@ -6,7 +6,7 @@ import java.net.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Scanner;
-
+import java.io.FileWriter;
 
 public class PhoneServer {
 
@@ -65,48 +65,63 @@ class ClientThread extends Thread
         this.s = s;
         this.dis = dis;
         this.dos = dos;
-
     }
     
         @Override
         public void run()
         {
-            // Wait for user input
-
-            String user_name;
             String received;
             String toreturn;
-            boolean name_pass = false;
+            String tokens[];
 
             while (true) {
-                try {
 
-                    Scanner scanner = new Scanner(System.in);
+                    try {
 
-                    if (name_pass)
-                    {
-                        continue;
-
-                    } else {
-                        user_name = dis.readUTF();
-                        name_pass = true;
-
-                    }
-
-                    System.out.println("Connected to: " + user_name);
-
-
-                    String err = scanner.nextLine();
-
-                    dos.writeUTF("What do you want to do\n-> STORE <name> <number> \twhere <number> = xxx-xxxx\n" +
+                    dos.writeUTF("\n**** PHONE SERVER ****\n-> STORE <name> <number> \t(where <number> = xxx-xxxx)\n" +
                             "-> GET <name>\n-> REMOVE <name>\n-> QUIT");
 
 
                     received = dis.readUTF();
+                    tokens = received.split(" ");
+
+                    if(received.equals("QUIT"))
+                    {
+                        System.out.println("Client " + this.s + " is disconnecting from server...");
+                        this.s.close();
+                        System.out.println("Connection closed to client: " + this.s);
+                        break;
+                    }
+
+                    switch(tokens[0]) {
+
+                        case "STORE":
+                            FileWriter writer = new FileWriter("phone_data.txt1", true);
+                            writer.write(tokens[1] + " " + tokens[2] + "\n");
+                            writer.close();
+                            toreturn = "'" + tokens[1] + " " + tokens[2] + "' has been stored in local database.";
+                            dos.writeUTF(toreturn);
+                            break;
+
+                        case "GET":
+                            toreturn = "GET from SERVER";
+                            dos.writeUTF(toreturn);
+                            break;
+
+                        case "REMOVE":
+                            toreturn = "REMOVE from SERVER";
+                            dos.writeUTF(toreturn);
+                            break;
+
+                        default:
+                            dos.writeUTF("Erroneous mess received. That is not a valid option. Try again.");
+                            break;
+
+                    }
 
 
                 } catch (IOException e) {
-                    // e.printStackTrace();
+                    e.printStackTrace();
                     //Scanner scanner = new Scanner(System.in);
                     //String err = scanner.nextLine();
                     System.out.println("print stack trade");

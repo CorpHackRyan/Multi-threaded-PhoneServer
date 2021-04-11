@@ -5,43 +5,39 @@ import java.net.*;
 import java.util.Scanner;
 
 
+
+import java.io.FileWriter;
+
+
+
+
 public class PhoneClient {
 
     public static void main(String[] args) throws Exception {
-        /**
-         * Open a server socket on the specified port number (2014) and monitor the port
-         * for connection requests. When a connection request is received, create a client
-         * request thread, passing to its constructor a reference to the Socket object that
-         * represents the established connection with the client.
-         */
 
-        System.out.println("Client run");
+        System.out.println("Client running...");
 
         int    client_port = 2015;
         int    server_port = 2014;
         String server_ip   = "localhost";
 
+        Scanner scanner = new Scanner(System.in);
+
         //Establish a connection with the Phone Server
         Socket connection_to_PServer = new Socket(server_ip, server_port);
-
-        System.out.println("Please enter your name: ");
-        Scanner scanner = new Scanner(System.in);
-        String msg = scanner.nextLine();
-
 
         // obtaining input and out streams
         DataInputStream dis = new DataInputStream(connection_to_PServer.getInputStream());
         DataOutputStream dos = new DataOutputStream(connection_to_PServer.getOutputStream());
 
-        dos.writeUTF(msg);
-
         while (true)
         {
             System.out.println(dis.readUTF());
+            System.out.println("INPUT> ");
             String tosend = scanner.nextLine();
             dos.writeUTF(tosend);
 
-            if(tosend.equals("Exit"))
+            if(tosend.equals("QUIT"))
             {
                 System.out.println("Closing this connection : " + connection_to_PServer);
                 connection_to_PServer.close();
@@ -49,6 +45,9 @@ public class PhoneClient {
                 break;
 
             }
+
+            String received_from_server = dis.readUTF();
+            System.out.println(received_from_server);
         }
 
         }
