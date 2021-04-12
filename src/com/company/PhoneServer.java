@@ -1,7 +1,5 @@
 package com.company;
 import java.io.*;
-import java.text.*;
-import java.util.*;
 import java.net.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -12,13 +10,12 @@ public class PhoneServer {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("Server is running..");
-
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
-        // The server socket.
         int my_port = 2014;
         ServerSocket listener = new ServerSocket(my_port);
+
+        System.out.println("Server is running..");
 
         // Begin infinite loop for server to wait for client connection requests
         while (true)
@@ -43,10 +40,7 @@ public class PhoneServer {
             }
             catch (Exception e) {
                 clientSocket.close();
-                e.printStackTrace();
-
-
-                }
+            }
         }
     }
 }
@@ -70,14 +64,15 @@ class ClientThread extends Thread
         @Override
         public void run()
         {
-            String received = "";
-            String toreturn = "";
-            String tokens[];
             String data_file_name = "phone_data.txt";
             String tmp_data_file_name = "phone_data.tmp";
-            String get_tokens[];
+
+            String received = "";
+            String toreturn = "";
             String name_deleted = "";
 
+            String tokens[];
+            String get_tokens[];
 
             while (true) {
 
@@ -153,6 +148,7 @@ class ClientThread extends Thread
                             writer_tmp.close();
                             reader_tmp.close();
 
+                            // Delete original file & replace with new file
                             File original_file = new File(data_file_name);
                             original_file.delete();
 
@@ -164,7 +160,7 @@ class ClientThread extends Thread
                             break;
 
                         default:
-                            dos.writeUTF("Erroneous mess received. That is not a valid option. Try again.");
+                            dos.writeUTF("Erroneous message received. That is not a valid option. Please try again.");
                             break;
 
                     }

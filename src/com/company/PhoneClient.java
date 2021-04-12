@@ -1,14 +1,7 @@
 package com.company;
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-
-
-
-import java.io.FileWriter;
-
-
 
 
 public class PhoneClient {
@@ -17,7 +10,6 @@ public class PhoneClient {
 
         System.out.println("Client running...");
 
-        int    client_port = 2015;
         int    server_port = 2014;
         String server_ip   = "localhost";
 
