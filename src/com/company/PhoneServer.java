@@ -73,9 +73,11 @@ class ClientThread extends Thread
             String received = "";
             String toreturn = "";
             String tokens[];
-            String data_file_name = "phone_data.txt1";
+            String data_file_name = "phone_data.txt";
+            String tmp_data_file_name = "phone_data.tmp";
             String get_tokens[];
-            String name_found = "";
+            String name_deleted = "";
+
 
             while (true) {
 
@@ -121,16 +123,44 @@ class ClientThread extends Thread
                                 }
 
                                 toreturn = "No name was found with that request.";
-
-                            } //
+                            }
 
                             reader.close();
                             dos.writeUTF(toreturn);
                             break;
 
                         case "REMOVE":
-                            toreturn = "REMOVE from SERVER";
-                            dos.writeUTF(toreturn);
+                            FileWriter writer_tmp = new FileWriter(tmp_data_file_name);
+                            File phone_data_tmp = new File(data_file_name);
+                            Scanner reader_tmp = new Scanner(phone_data_tmp);
+
+                            while (reader_tmp.hasNextLine()) {
+                                String line_read = reader_tmp.nextLine();
+                                get_tokens = line_read.split(" ");
+
+                                if (get_tokens[0].contains(tokens[1])) {
+                                    // dont write to the new temp file
+                                    name_deleted = get_tokens[0] + " was deleted from the database.";
+                                    continue;
+
+                                } else {
+
+                                    writer_tmp.write(get_tokens[0] + " " + get_tokens[1] + "\n");
+                                    System.out.println("Writing to temp file " + get_tokens[0] + " " + get_tokens[1]);
+                                }
+                            }
+
+                            writer_tmp.close();
+                            reader_tmp.close();
+
+                            File original_file = new File(data_file_name);
+                            original_file.delete();
+
+                            File oldName = new File(tmp_data_file_name);
+                            File newName = new File(data_file_name);
+                            oldName.renameTo(newName);
+
+                            dos.writeUTF(name_deleted);
                             break;
 
                         default:
@@ -142,9 +172,6 @@ class ClientThread extends Thread
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //Scanner scanner = new Scanner(System.in);
-                    //String err = scanner.nextLine();
-                    System.out.println("print stack trade");
                 }
             }
         }
