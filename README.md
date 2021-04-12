@@ -22,6 +22,14 @@ This program was built to meet the following scope:
 * Accept requested connections and support multiple connections via thread extender
 * Maintain an appropriate data structure to hold data from client.
 * Process all specific message requests from client
+___
+# Screenshots
+### Multiple connections to server
+![](snapshots/multi-thread.png)
+### Example of STORE/GET/REMOVE output
+![](snapshots/client.png)
+
+
 
 
 
