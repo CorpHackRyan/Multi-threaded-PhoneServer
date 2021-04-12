@@ -1,5 +1,4 @@
 # PHONE SERVER v1.0
-Ryan OConnor
 
 *A client/server model with a built-in address book system*. This program will display a menu with the following options: STORE, GET, REMOVE or QUIT. A short description of what each option does is below:
 * STORE (name) (number) - When this is invoked, the name and number will be added to the address book on the server side.
@@ -11,14 +10,14 @@ ___
 
 This program was built to meet the following scope:
 
-###*CLIENT SIDE*
+### *CLIENT SIDE*
 * Requests a connection with the server
 * Send three types of messages:
   * STORE
   * GET
   * REMOVE
     
-###*SERVER SIDE*
+### *SERVER SIDE*
 * Accept requested connections and support multiple connections via thread extender
 * Maintain an appropriate data structure to hold data from client.
 * Process all specific message requests from client
